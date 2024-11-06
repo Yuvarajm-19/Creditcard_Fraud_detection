@@ -7,7 +7,6 @@ import os
 model = joblib.load('credit_card_fraud_model.joblib')  # Assuming the model file is in the same directory
 
 app = Flask(__name__)
-
 # Home route to serve the HTML page
 @app.route('/')
 def home():
@@ -28,5 +27,6 @@ def predict():
 
 if __name__ == '__main__':
     # Specify host as '0.0.0.0' and port as 10000 for Render
-    port = int(os.getenv("PORT", 10000))  # Get the port from Render environment variable, default to 10000
+    port = int(os.getenv("PORT", 5000
+                         ))  # Get the port from Render environment variable, default to 10000
     app.run(host='0.0.0.0', port=port, debug=True)
