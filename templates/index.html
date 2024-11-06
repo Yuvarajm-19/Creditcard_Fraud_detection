@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Fraud Detection</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: #1c1c1c;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        /* Title and Info Styling */
+        h1 {
+            color: #ffdd57;
+            margin-bottom: 10px;
+        }
+
+        p.info {
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 20px;
+        }
+
+        /* Form styling */
+        form {
+            display: grid;
+            gap: 10px;
+        }
+
+        /* Label and Input Styling */
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ccc;
+            text-align: left;
+            grid-column: span 2;
+        }
+
+        input[type="number"], input[type="text"] {
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Button styling */
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #ff5722;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            grid-column: span 2;
+        }
+
+        button:hover {
+            background-color: #e64a19;
+        }
+
+        /* Result Styling */
+        #result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffdd57;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fraud Detection</h1>
+        <p class="info">Enter transaction details below to check if it's potentially fraudulent.</p>
+
+        <form id="transactionForm">
+            <input type="number" id="Time" placeholder="Time" required>
+            <input type="number" id="Amount" placeholder="Amount" required>
+            <label for="Vvalues">Enter V1 to V28 (comma-separated):</label>
+            <input type="text" id="Vvalues" placeholder="V1,V2,V3,...,V28" required>
+            <button type="button" onclick="submitTransaction()">Check Fraud</button>
+        </form>
+
+        <h2 id="result"></h2>
+    </div>
+
+    <script>
+        async function submitTransaction() {
+            const vValues = document.getElementById("Vvalues").value.split(",").map(v => parseFloat(v.trim()));
+            const data = {
+                Time: parseFloat(document.getElementById("Time").value),
+                Amount: parseFloat(document.getElementById("Amount").value),
+                V1: vValues[0],
+                V2: vValues[1],
+                V3: vValues[2],
+                V4: vValues[3],
+                V5: vValues[4],
+                V6: vValues[5],
+                V7: vValues[6],
+                V8: vValues[7],
+                V9: vValues[8],
+                V10: vValues[9],
+                V11: vValues[10],
+                V12: vValues[11],
+                V13: vValues[12],
+                V14: vValues[13],
+                V15: vValues[14],
+                V16: vValues[15],
+                V17: vValues[16],
+                V18: vValues[17],
+                V19: vValues[18],
+                V20: vValues[19],
+                V21: vValues[20],
+                V22: vValues[21],
+                V23: vValues[22],
+                V24: vValues[23],
+                V25: vValues[24],
+                V26: vValues[25],
+                V27: vValues[26],
+                V28: vValues[27],
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                document.getElementById('result').innerText =
+                    `Prediction: ${result.prediction === 1 ? 'Fraudulent Transaction' : 'Legitimate Transaction'}`;
+            } catch (error) {
+                document.getElementById('result').innerText = 'Error: Unable to make prediction.';
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
